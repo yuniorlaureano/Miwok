@@ -1,8 +1,10 @@
 package com.example.android.miwok;
 
+import android.content.Context;
+import android.media.AudioManager;
 import android.media.MediaPlayer;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -12,6 +14,45 @@ import java.util.ArrayList;
 public class PhrasesActivity extends AppCompatActivity {
 
     private MediaPlayer player;
+    private AudioManager mAudioManager;
+
+    AudioManager.OnAudioFocusChangeListener afChangeListener = new AudioManager.OnAudioFocusChangeListener() {
+        @Override
+        public void onAudioFocusChange(int i) {
+
+            switch (i){
+                case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT : {
+                    if (player != null){
+
+                        player.pause();
+                        player.seekTo(0);
+                    }
+                }
+                break;
+                case AudioManager.AUDIOFOCUS_LOSS : {
+                    releaseMediaPlayer();
+                }
+                break;
+                case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK :
+                {
+                    if (player != null){
+
+                        player.pause();
+                        player.seekTo(0);
+                    }
+                }
+                break;
+                case AudioManager.AUDIOFOCUS_GAIN :{
+                    if (player != null)
+                    {
+                        player.start();
+                    }
+                }
+                break;
+            }
+        }
+    };
+
 
     private MediaPlayer.OnCompletionListener mOnCompletionListener = new MediaPlayer.OnCompletionListener(){
 
@@ -25,6 +66,8 @@ public class PhrasesActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.word_list);
+
+        mAudioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
 
         final ArrayList<Word> words = new ArrayList<Word>();
 
@@ -50,13 +93,20 @@ public class PhrasesActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 releaseMediaPlayer();
-                player = MediaPlayer.create(getApplicationContext(), words.get(i).getmAudioResourceId());
-                player.start();
 
-                player.setOnCompletionListener(mOnCompletionListener);
+                int result  = mAudioManager.requestAudioFocus(afChangeListener, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN_TRANSIENT);
+
+                if (result == AudioManager.AUDIOFOCUS_REQUEST_GRANTED){
+
+                    player = MediaPlayer.create(getApplicationContext(), words.get(i).getmAudioResourceId());
+                    player.start();
+
+                    player.setOnCompletionListener(mOnCompletionListener);
+
+                }
+
             }
         });
-
 
 
     }

@@ -22,8 +22,11 @@ public class NumbersActivity extends AppCompatActivity {
 
             switch (i){
                 case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT : {
-                    player.pause();
-                    player.seekTo(0);
+                    if (player != null){
+
+                        player.pause();
+                        player.seekTo(0);
+                    }
                 }
                 break;
                 case AudioManager.AUDIOFOCUS_LOSS : {
@@ -32,8 +35,11 @@ public class NumbersActivity extends AppCompatActivity {
                 break;
                 case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK :
                 {
-                    player.pause();
-                    player.seekTo(0);
+                    if (player != null){
+
+                        player.pause();
+                        player.seekTo(0);
+                    }
                 }
                 break;
                 case AudioManager.AUDIOFOCUS_GAIN :{

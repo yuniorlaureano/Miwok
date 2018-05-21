@@ -30,4 +30,9 @@
         <item name="android:textStyle">bold</item>
         <item name="android:textAppearance">?android:textAppearanceMedium</item>
     </style>
+    <style name="PhraseStyle">
+        <item name="android:paddingTop">88dp</item>
+        <item name="android:paddingLeft">16dp</item>
+        <item name="android:paddingBottom">88dp</item>
+    </style>
 </resources>

@@ -1,11 +1,9 @@
 package com.example.android.miwok;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.ActionBar;
+import android.support.design.widget.TabLayout;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.view.View;
-import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -17,6 +15,13 @@ public class MainActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_main);
 
+        ViewPager viewPager = (ViewPager) findViewById(R.id.viewPager);
+        viewPager.setAdapter(new MiwokFragmentPagerAdapter(getSupportFragmentManager(), MainActivity.this));
+
+        TabLayout tabLayout = (TabLayout) findViewById(R.id.sliding_tabs);
+        tabLayout.setupWithViewPager(viewPager);
+
+        /*
         ActionBar ab = getSupportActionBar();
         // Enable the Up button
         ab.setDisplayHomeAsUpEnabled(true);
@@ -60,7 +65,7 @@ public class MainActivity extends AppCompatActivity {
                 Intent phraseItent = new Intent(MainActivity.this, PhrasesActivity.class);
                 startActivity(phraseItent);
             }
-        });
+        });*/
     }
 
 
